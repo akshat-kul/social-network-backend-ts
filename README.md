@@ -15,7 +15,7 @@ This project is part of a backend engineering assignment and demonstrates:
 
 ## 🌐 Live Demo
 
-Deployed API URL
+- Deployed API URL:
 **[Production GraphQL API](https://social-network-backend-ts-production.up.railway.app/graphql)**
 
 ---
