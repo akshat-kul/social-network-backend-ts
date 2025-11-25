@@ -1,6 +1,14 @@
-version: '3.8'
-
 services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: "postgresql://postgres:postgres@db:5432/socialdb?schema=public"
+      JWT_SECRET: "supersecret123"
+    depends_on:
+      - db
+
   db:
     image: postgres:15
     restart: always

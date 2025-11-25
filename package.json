@@ -1,11 +1,11 @@
 {
   "name": "social-network-backend-ts",
   "version": "1.0.0",
-  "description": "A minimal social-media style backend service built with **Node.js**, **TypeScript**, **GraphQL (Apollo Server)**, and **PostgreSQL (Prisma ORM)**.",
-  "main": "index.js",
+  "description": "A minimal social-media style backend service built with Node.js, TypeScript, GraphQL (Apollo Server), and PostgreSQL (Prisma ORM).",
   "scripts": {
     "dev": "ts-node-dev --respawn src/server.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "start": "node dist/server.js"
   },
   "repository": {
     "type": "git",
