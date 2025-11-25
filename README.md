@@ -66,15 +66,18 @@ This project is part of a backend engineering assignment and demonstrates:
 
 ```
 src/
-  graphql/
-    resolvers/
-    typeDefs/
-    schema.ts
-    context.ts
-  prisma/
-    schema.prisma
-  utils/
+  prisma.ts
   server.ts
+  graphql/
+    typeDefs/
+    resolvers/
+    utils/
+  ...
+prisma/
+  schema.prisma
+Dockerfile
+docker-compose.yml
+README.md
 ```
 
 - **Resolvers** → business logic  
@@ -172,7 +175,7 @@ http://localhost:3000/
 
 ---
 
-## 📜 GraphQL Schema Overview
+## 📜 GraphQL API Overview
 
 ### Queries:
 - `user(id)`
@@ -228,16 +231,41 @@ Starts:
 
 ---
 
-## 🚀 Deployment Steps
+## Testing
+A complete Postman Collection is included:
+```bash
+postman/social-graph-collection.json
+```
 
-### Recommended Platforms
-- **Railway**
-- **Render**
-- **Fly.io**
+### It contains:
 
-1. Push repo to GitHub  
-2. Connect project to one of the above platforms  
-3. Add environment variables  
-4. Deploy 🚀  
+- Register
+- Login
+- me
+- userByEmail
+- follow / unfollow
+- createPost
+- updatePost
+- deletePost
+- postsByUser (paginated)
+- feed (paginated)
 
+## 🚀 Deployment (Render / Railway)
+### Railway
+- Create project
+- Add PostgreSQL plugin
+- Connect GitHub repo
+- Add environment variables
+- Deploy
+- Render
+
+Build command:
+```bash
+npm install && npm run build
+```
+
+Start command:
+```bash
+node dist/server.js
+```
 ---

@@ -1,0 +1,28 @@
+input MediaInput {
+  type: String!   # e.g. "image", "video"
+  url: String!
+}
+
+extend type Mutation {
+  createPost(content: String!, media: [MediaInput!]): Post!
+  updatePost(id: Int!, content: String, media: [MediaInput!]): Post!
+  deletePost(id: Int!): Boolean!
+}
+
+extend type Query {
+  postsByUser(userId: Int!, limit: Int, cursor: Int): [Post!]!
+  feed(limit: Int, cursor: Int): [Post!]!
+}
+
+type Media {
+  type: String!
+  url: String!
+}
+
+type Post {
+  id: Int!
+  content: String
+  media: [Media]
+  author: User!
+  createdAt: String!
+}
