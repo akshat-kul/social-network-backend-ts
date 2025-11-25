@@ -1,5 +1,7 @@
-import { prisma } from "../../prisma";
+import { getPrisma } from "../../prisma";
 import { requireAuth } from "../utils/authGuard";
+
+const prisma = getPrisma();
 
 export default {
   Query: {
