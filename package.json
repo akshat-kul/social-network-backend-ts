@@ -1,11 +1,17 @@
 {
   "name": "social-network-backend-ts",
   "version": "1.0.0",
-  "description": "A minimal social-media style backend service built with Node.js, TypeScript, GraphQL (Apollo Server), and PostgreSQL (Prisma ORM).",
+  "description": "A minimal social-media style backend built with Node.js, TypeScript, GraphQL, Apollo Server, and Prisma.",
   "scripts": {
     "dev": "ts-node-dev --respawn src/server.ts",
-    "build": "tsc",
-    "start": "node dist/server.js"
+
+    "build": "prisma generate && tsc && npm run copy:graphql",
+
+    "copy:graphql": "mkdir -p dist/graphql/typeDefs && cp -R src/graphql/typeDefs/. dist/graphql/typeDefs/",
+
+    "start": "node dist/server.js",
+
+    "postinstall": "prisma generate"
   },
   "repository": {
     "type": "git",

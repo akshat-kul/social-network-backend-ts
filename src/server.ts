@@ -9,29 +9,35 @@ import util from "util";
 const asyncExec = util.promisify(exec);
 const JWT_SECRET = process.env.JWT_SECRET || "supersecret123";
 
+
+// -------------------------------------------------------------
+// 🔥 PUT runMigrations() RIGHT HERE (after imports)
+// -------------------------------------------------------------
 async function runMigrations() {
   try {
     const prisma = getPrisma();
 
-    console.log("⏳ Checking database connection...");
+    console.log("⏳ Checking DB connection...");
     await prisma.$queryRaw`SELECT 1`;
-    console.log("🎉 Database reachable!");
+    console.log("🎉 DB connected!");
 
-    // Only run migrations inside Docker/Railway
     if (process.env.NODE_ENV === "production") {
-      console.log("🔧 Running Prisma migrations...");
+      console.log("⚙️ Running Prisma migrations...");
       await asyncExec("npx prisma migrate deploy");
-      console.log("✅ Prisma migrations applied!");
+      console.log("✅ Migrations applied!");
     } else {
-      console.log("Skipping migrations in development...");
+      console.log("🟡 Skipping migrations (dev mode)");
     }
+
   } catch (err) {
     console.error("❌ Migration error:", err);
   }
 }
+// -------------------------------------------------------------
+
 
 async function startServer() {
-  await runMigrations();
+  await runMigrations();   // 🔥 Run this BEFORE starting Apollo
 
   const prisma = getPrisma();
   const schema = buildSchema();
@@ -47,8 +53,7 @@ async function startServer() {
   const { url } = await startStandaloneServer(server, {
     listen: { port: 3000 },
     context: async ({ req }) => {
-      const prisma = getPrisma(); // 🔥 FIXED
-
+      const prisma = getPrisma();
       const auth = req.headers.authorization || "";
       let currentUser = null;
 
