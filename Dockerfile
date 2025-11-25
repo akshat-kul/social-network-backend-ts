@@ -2,24 +2,24 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-ENV NODE_ENV=production
-
+# Install all deps including dev
 COPY package*.json ./
-RUN npm install
+RUN npm ci --include=dev
+
+# Set env AFTER installing dev deps
+ENV NODE_ENV=production
 
 # Copy source code
 COPY . .
 
-# Build TypeScript
+# Build TS
 RUN npm run build
 
-# Copy GraphQL schema to dist folder
+# Copy GraphQL schema
 RUN mkdir -p dist/graphql/typeDefs && \
     cp -R src/graphql/typeDefs/. dist/graphql/typeDefs/
 
-# Do NOT run prisma generate here (DB env not available yet)
-
-# Add entrypoint script
+# Add entrypoint
 COPY docker-entrypoint.sh .
 RUN chmod +x docker-entrypoint.sh
 
