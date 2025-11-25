@@ -1,42 +1,49 @@
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
+import { buildSchema } from "./graphql/schema";
 import { prisma } from "./prisma";
+import jwt from "jsonwebtoken";
 
-// Defining GraphQL schema
-const typeDefs = `#graphql
-  type User {
-    id: Int!
-    username: String!
-    email: String!
-  }
+const JWT_SECRET = process.env.JWT_SECRET || "supersecret123";
 
-  type Query {
-    hello: String!
-    users: [User!]!
-  }
-`;
+async function startServer() {
+  const schema = buildSchema();
 
-const resolvers = {
-  Query: {
-    hello: () => "Testing GraphQL + Prisma working!",
-    users: async (_, __, ctx) => {
-      return ctx.prisma.user.findMany();
-    },
-  },
-};
-
-async function start() {
   const server = new ApolloServer({
-    typeDefs,
-    resolvers,
+    schema,
+    formatError: (formattedError) => {
+      // Only return clean error messages
+      return {
+        message: formattedError.message,
+        code: formattedError.extensions.code,
+      };
+    },
   });
 
   const { url } = await startStandaloneServer(server, {
-    context: async () => ({ prisma }),
     listen: { port: 3000 },
+    context: async ({ req }) => {
+      const auth = req.headers.authorization || "";
+      let currentUser = null;
+
+      if (auth.startsWith("Bearer ")) {
+        try {
+          const token = auth.replace("Bearer ", "");
+          const payload = jwt.verify(token, JWT_SECRET) as any;
+
+          currentUser = await prisma.user.findUnique({
+            where: { id: payload.userId },
+          });
+        } catch (err) {
+          console.log("Invalid token:", err);
+        }
+      }
+
+      return { prisma, currentUser };
+    },
   });
 
-  console.log("GraphQL running at:", url);
+  console.log(`Server running at ${url}`);
 }
 
-start();
+startServer();
