@@ -17,7 +17,7 @@ This project is part of a backend engineering assignment and demonstrates:
 
 (Replace after deployment)
 ```
-🔗 Deployed API URL: [https://your-deployed-url.com/graphql](https://social-network-backend-ts-production.up.railway.app/graphql)
+🔗 Deployed API URL: **[Production GraphQL API](https://social-network-backend-ts-production.up.railway.app/graphql)**
 ```
 
 ---
